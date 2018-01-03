@@ -1,4 +1,10 @@
 Data/
 pyenv/
+*.idea/
+*python*
+*tmp
 
 *.pyc
+
+*.DS_Store
+
