@@ -10,7 +10,12 @@ class TweetItem(Item):
     datetime = Field() # post time
     text = Field()     # text content
     user_id = Field()  # user id
-    
+
+    has_retweet = Field() # True/False, whether a tweet is retweet
+    origin_text = Field() # text content
+    origin_uid = Field()  # user id of orignal tweet
+    origin_url = Field()  # url of orignal tweet
+
     has_image = Field() # True/False, whether a tweet contains images
     images = Field()    # a list of image urls, empty if none
 
