@@ -11,7 +11,11 @@ class TweetItem(Item):
     text = Field()     # text content
     user_id = Field()  # user id
 
-    has_retweet = Field() # True/False, whether a tweet is retweet
+    reply_ct = Field()    # count of antwort
+    retweet_ct = Field()  # count of retweet
+    favorite_ct = Field() # count of like
+
+    retweet = Field() # True/False, whether a tweet is retweet
     origin_text = Field() # text content
     origin_uid = Field()  # user id of orignal tweet
     origin_url = Field()  # url of orignal tweet

@@ -99,14 +99,47 @@ class TweetScraper(CrawlSpider):
                 ### get text content
                 tweetItem['text'] = '\n'.join(item.xpath('.//div[@class="content"]/p').xpath('.//.').extract())
                 if tweetItem['text'] == '':
+                    tweetItem['text'] = '\n'.join(
+                        item.xpath('.//div[@class="js-tweet-text-container"]/p').xpath('.//./text()').extract())
+                    tweetItem['url'] = "https://twitter.com%s" % (item.xpath('.//@data-permalink-path').extract()[0])
+                    logger.debug("000000000000000000000000000000000\n%s" %tweetItem)
                     continue #skip no <p> tweet
 
+                ### get action list
+                tweetItem['reply_ct'] = item.xpath(
+                    './/span[@class="ProfileTweet-action--reply u-hiddenVisually"]/span/@data-tweet-stat-count').extract()[0]
+                tweetItem['retweet_ct'] = item.xpath(
+                    './/span[@class="ProfileTweet-action--retweet u-hiddenVisually"]/span/@data-tweet-stat-count').extract()[0]
+                tweetItem['favorite_ct'] = item.xpath(
+                    './/span[@class="ProfileTweet-action--favorite u-hiddenVisually"]/span/@data-tweet-stat-count').extract()[0]
+                if '' == tweetItem['reply_ct']:
+                    tweetItem['reply_ct'] = 0
+                if '' == tweetItem['retweet_ct']:
+                    tweetItem['retweet_ct'] = 0
+                if '' == tweetItem['favorite_ct']:
+                    tweetItem['favorite_ct'] = 0
+
+                ### get origin information
+                orign_item = item.xpath('.//div[@class="QuoteTweet-container"]')
+                if 0 != len(orign_item):
+                    tweetItem['retweet'] = True
+                    tweetItem['origin_text'] = " ".join(orign_item.xpath('.//div[@class="tweet-content"]/div/div').xpath(
+                        './/./*/text()').extract())\
+                        .replace("@ ", "@")\
+                        .replace("# ", "#")\
+                        .replace("http:// ", "http://") \
+                        .replace("https:// ", "https://") \
+                        .replace("www. ", "www.")
+                    tweetItem['origin_uid'] = orign_item.xpath('.//div/@data-user-id').extract()[0]
+                    tweetItem['origin_url'] = "https://twitter.com%s" %orign_item.xpath('.//div/@href').extract()[0]
+                else:
+                    tweetItem['retweet'] = False
+                    logger.debug("len: 222222222222222222222 ------> %d" % len(orign_item))
+
                 ### get meta data
-                tweetItem['url'] = item.xpath('.//@data-permalink-path').extract()[0]
-                tweetItem['datetime'] = \
-                    item.xpath(
+                tweetItem['url'] = "https://twitter.com%s" %(item.xpath('.//@data-permalink-path').extract()[0])
+                tweetItem['datetime'] = item.xpath(
                         './/div[@class="content"]/div[@class="stream-item-header"]/small[@class="time"]/a/span/@data-time').extract()[0]
-                
 
                 ### get photo
                 has_cards = item.xpath('.//@data-card-type').extract()
