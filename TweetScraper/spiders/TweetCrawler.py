@@ -181,6 +181,7 @@ class TweetScraper(CrawlSpider):
                 userItem['screen_name'] = item.xpath('.//@data-screen-name').extract()[0]
                 userItem['avatar'] = \
                     item.xpath('.//div[@class="content"]/div[@class="stream-item-header"]/a/img/@src').extract()[0]
+                userItem['url'] = "https://twitter.com/%s" %(item.xpath('.//@data-screen-name').extract()[0])
 
                 yield tweetItem
                 yield userItem

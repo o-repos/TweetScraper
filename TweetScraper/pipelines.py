@@ -55,6 +55,7 @@ class SaveToMongoPipeline(object):
 
 
 class SaveToFilePipeline(object):
+
     ''' pipeline that save data to disk '''
     def __init__(self):
         self.saveTweetPath = settings['SAVE_TWEET_PATH']

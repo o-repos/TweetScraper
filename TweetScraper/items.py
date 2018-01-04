@@ -35,4 +35,4 @@ class UserItem(Item):
     name = Field()          # user name
     screen_name = Field()   # user screen name
     avatar = Field()        # avator url
-    
+    url = Field()           # homepage url
