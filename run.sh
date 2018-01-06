@@ -1,5 +1,6 @@
 #!/bin/bash
-source scrapy/bin/activate
+source python/bin/activate
+
 echo -e "PLEASE INPUT KEYWORD, WHAT YOU WANT TO SEARCH\n------------------------------------------"
 read -p "please input your keyword
 (more than one keyword, use ',' to split: Feinstaub,Luftverschmutzung):
