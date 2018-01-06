@@ -9,12 +9,12 @@ import os
 from TweetScraper.items import TweetItem,UserItem
 from TweetScraper.utils import mkdirs
 
-
 logger = logging.getLogger(__name__)
 
+
 class SaveToMongoPipeline(object):
-    
     ''' pipeline that save data to mongodb '''
+
     def __init__(self):
         connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
         db = connection[settings['MONGODB_DB']]
@@ -22,7 +22,6 @@ class SaveToMongoPipeline(object):
         self.userCollection = db[settings['MONGODB_USER_COLLECTION']]
         self.tweetCollection.ensure_index([('ID',pymongo.ASCENDING)], unique=True, dropDups=True)
         self.userCollection.ensure_index([('ID',pymongo.ASCENDING)], unique=True, dropDups=True)
-
 
     def process_item(self, item, spider):
         if isinstance(item, TweetItem):
@@ -53,16 +52,14 @@ class SaveToMongoPipeline(object):
             logger.info("Item type is not recognised! type = %s"%type(item))
 
 
-
 class SaveToFilePipeline(object):
-
     ''' pipeline that save data to disk '''
+
     def __init__(self):
         self.saveTweetPath = settings['SAVE_TWEET_PATH']
         self.saveUserPath = settings['SAVE_USER_PATH']
         mkdirs(self.saveTweetPath) # ensure the path exists
         mkdirs(self.saveUserPath)
-
 
     def process_item(self, item, spider):
         if isinstance(item, TweetItem):
@@ -72,6 +69,7 @@ class SaveToFilePipeline(object):
                 ### or you can rewrite the file, if you don't want to skip:
                 # self.save_to_file(item,savePath)
                 # logger.info("Update tweet:%s"%dbItem['url'])
+                # logger.info("Update tweet:%s" % item['url'])
             else:
                 self.save_to_file(item,savePath)
                 logger.info("Add tweet:%s"%item['url'])
@@ -83,13 +81,13 @@ class SaveToFilePipeline(object):
                 ### or you can rewrite the file, if you don't want to skip:
                 # self.save_to_file(item,savePath)
                 # logger.info("Update user:%s"%dbItem['screen_name'])
+                # logger.info("Update user:%s" % item['screen_name'])
             else:
                 self.save_to_file(item,savePath)
                 logger.info("Add user:%s"%item['screen_name'])
 
         else:
             logger.info("Item type is not recognised! type = %s"%type(item))
-
 
     def save_to_file(self, item, fname):
         ''' input: 
