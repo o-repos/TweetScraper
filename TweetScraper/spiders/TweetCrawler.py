@@ -100,27 +100,6 @@ class TweetScraper(CrawlSpider):
                 if '' == tweet['nbr_favorite']:
                     tweet['nbr_favorite'] = 0
 
-                ### get origin information
-                """
-                orign_item = item.xpath('.//div[@class="QuoteTweet-container"]')
-                if 0 != len(orign_item):
-                    tweet['retweet'] = True
-                    tweet['origin_text'] = " ".join(
-                        orign_item.xpath('.//div[@class="tweet-content"]/div/div').xpath(
-                            './/./*/text()').extract()) \
-                        .replace("@ ", "@") \
-                        .replace("# ", "#") \
-                        .replace("http:// ", "http://") \
-                        .replace("https:// ", "https://") \
-                        .replace("www. ", "www.") \
-                        .replace("\n", "")
-                    tweet['origin_uid'] = orign_item.xpath('.//div/@data-user-id').extract()[0]
-                    tweet['origin_url'] = "https://twitter.com%s" % orign_item.xpath('.//div/@href').extract()[0]
-                else:
-                    tweet['is_retweet'] = False
-                    logger.debug("len: 222222222222222222222 ------> %d" % len(orign_item))
-                """
-
                 ### get meta data
                 tweet['url'] = "https://twitter.com%s" % (item.xpath('.//@data-permalink-path').extract()[0])
                 tweet['datetime'] = datetime.fromtimestamp(int(
@@ -163,8 +142,26 @@ class TweetScraper(CrawlSpider):
                 is_reply = item.xpath('.//span[@class="ReplyingToContextBelowAuthor"]').extract()
                 tweet['is_reply'] = is_reply != []
 
+                ### get original tweet:
+                # 1. set is_retweet flag,
+                # 2. get context, uid and url
                 is_retweet = item.xpath('.//span[@class="js-retweet-text"]').extract()
                 tweet['is_retweet'] = is_retweet != []
+                """
+                orign_item = item.xpath('.//div[@class="QuoteTweet-container"]')
+                if 0 != len(orign_item):
+                    tweet['origin_text'] = " ".join(
+                        orign_item.xpath('.//div[@class="tweet-content"]/div/div').xpath(
+                            './/./*/text()').extract()) \
+                        .replace("@ ", "@") \
+                        .replace("# ", "#") \
+                        .replace("http:// ", "http://") \
+                        .replace("https:// ", "https://") \
+                        .replace("www. ", "www.") \
+                        .replace("\n", "")
+                    tweet['origin_uid'] = orign_item.xpath('.//div/@data-user-id').extract()[0]
+                    tweet['origin_url'] = "https://twitter.com%s" % orign_item.xpath('.//div/@href').extract()[0]
+                """
 
                 tweet['user_id'] = item.xpath('.//@data-user-id').extract()[0]
                 logger.debug('\n%s' % tweet)
