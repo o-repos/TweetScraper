@@ -24,7 +24,7 @@ class TweetScraper(CrawlSpider):
     name = 'TweetScraper'
     allowed_domains = ['twitter.com']
 
-    def __init__(self, query='', lang='', cral_user=False, top_tweet=False):
+    def __init__(self, query='', lang='', crawl_user=False, top_tweet=False):
         self.query = query
         self.url = "https://twitter.com/i/search/timeline?l={}".format(lang)
 
@@ -33,11 +33,11 @@ class TweetScraper(CrawlSpider):
 
         self.url = self.url + "&q=%s&src=typed&max_position=%s"
 
-        self.crawl_user = cral_user
+        self.crawl_user = crawl_user
 
     def start_requests(self):
         url = self.url % (quote(self.query), '')
-        yield http.Request(url, callable=self.parse_page)
+        yield http.Request(url, callback=self.parse_page)
 
     def parse_page(self, response):
         # inspect_response(response, self)
@@ -101,6 +101,7 @@ class TweetScraper(CrawlSpider):
                     tweet['nbr_favorite'] = 0
 
                 ### get origin information
+                """
                 orign_item = item.xpath('.//div[@class="QuoteTweet-container"]')
                 if 0 != len(orign_item):
                     tweet['retweet'] = True
@@ -118,6 +119,7 @@ class TweetScraper(CrawlSpider):
                 else:
                     tweet['is_retweet'] = False
                     logger.debug("len: 222222222222222222222 ------> %d" % len(orign_item))
+                """
 
                 ### get meta data
                 tweet['url'] = "https://twitter.com%s" % (item.xpath('.//@data-permalink-path').extract()[0])
