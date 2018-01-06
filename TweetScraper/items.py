@@ -4,18 +4,21 @@
 from scrapy import Item, Field
 
 
-class TweetItem(Item):
+class Tweet(Item):
     ID = Field()       # tweet id
     url = Field()      # tweet url
     datetime = Field() # post time
     text = Field()     # text content
     user_id = Field()  # user id
+    usernameTweet = Field()  # username of tweet
 
-    reply_ct = Field()    # count of antwort
-    retweet_ct = Field()  # count of retweet
-    favorite_ct = Field() # count of like
+    nbr_reply = Field()    # count of antwort
+    nbr_retweet = Field()  # count of retweet
+    nbr_favorite = Field() # count of like
 
-    retweet = Field() # True/False, whether a tweet is retweet
+    is_reply = Field()    # boolean if replied or not
+    is_retweet = Field() # True/False, whether a tweet is retweet
+
     origin_text = Field() # text content
     origin_uid = Field()  # user id of orignal tweet
     origin_url = Field()  # url of orignal tweet
@@ -30,7 +33,7 @@ class TweetItem(Item):
     medias = Field()    # a list of media
 
 
-class UserItem(Item):
+class User(Item):
     ID = Field()            # user id
     name = Field()          # user name
     screen_name = Field()   # user screen name

@@ -1,10 +1,14 @@
 Data/
 pyenv/
 *.idea/
-*python*
+*python/
+*python3/
+*scrapy/
+*Data/*
+
 *tmp
 
 *.pyc
-
 *.DS_Store
+*.log
 
